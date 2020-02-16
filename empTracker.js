@@ -28,20 +28,28 @@ function start() {
         switch (answer.action) {
             case "View departments":
                 viewDepartments();
+                break;
             case "View roles":
                 viewRoles();
+                break;
             case "View employees":
                 viewEmployees();
+                break;
             case "Add department":
                 addDepartment();
+                break;
             case "Add role":
                 addRole();
+                break;
             case "Add employee":
                 addEmployee();
+                break;
             case "Update employee role":
                 updateEmployeeRole();
+                break;
             case "EXIT":
                 connection.end();
+                break;
         }
     });
 }
