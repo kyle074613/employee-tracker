@@ -3,11 +3,11 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
-    user: "root",
-    password: "************",
+    user: "homework",
+    password: "12345",
     database: "employee_tracker_db"
 });
 
@@ -40,17 +40,36 @@ function start() {
                 addEmployee();
             case "Update employee role":
                 updateEmployeeRole();
-            default:
+            case "EXIT":
                 connection.end();
         }
     });
 }
 
 function viewDepartments() {
-
+    const query = "SELECT * FROM department";
+    connection.query(query, function (err, res) {
+        console.log("\n")
+        console.table(res);
+        start();
+    });
 }
 
 function viewRoles() {
+    const query = `
+    SELECT 
+        role.id, role.title, role.salary, department.name 
+    FROM 
+        role 
+    LEFT JOIN 
+        department 
+    ON (role.department_id = department.id)`
+
+    connection.query(query, function (err, res) {
+        console.log("\n");
+        console.table(res);
+        start();
+    })
 
 }
 
