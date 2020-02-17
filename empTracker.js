@@ -143,7 +143,7 @@ function addRole() {
                 type: "list",
                 message: "Choose department: ",
                 choices: function () {
-                    var depArray = [];
+                    let depArray = [];
                     for (let i = 0; i < res.length; i++)
                         depArray.push(res[i].department);
 
@@ -180,7 +180,65 @@ function addRole() {
 }
 
 function addEmployee() {
+    connection.query("SELECT * FROM role", function (err, roleRes) {
+        if (err) throw err;
+        connection.query("SELECT concat(first_name, ' ', last_name) AS full_name FROM employee", function (err, empRes) {
+            inquirer.prompt([
+                {
+                    name: "firstName",
+                    type: "input",
+                    message: "Enter first name. "
+                },
+                {
+                    name: "lastName",
+                    type: "input",
+                    message: "Enter last name. "
+                },
+                {
+                    name: "role",
+                    type: "list",
+                    message: "What is the employee's role?",
+                    choices: function () {
+                        let roleArray = []
+                        for (let i = 0; i < roleRes.length; i++)
+                            roleArray.push(roleRes[i].title)
+                        return roleArray;
+                    }
+                },
+                {
+                    name: "manager",
+                    type: "list",
+                    message: "Who is the employee's manager?",
+                    choices: function () {
+                        let manArray = ['None'];
+                        for (let i = 0; i < empRes.length; i++)
+                            manArray.push(empRes[i].full_name)
+                        return manArray;
+                    }
+                }
+            ]).then(function (answer) {
+                connection.query("SELECT id FROM role WHERE title = ?", answer.role, function (err, roleIdRes) {
+                    connection.query("SELECT id FROM employee WHERE concat(first_name, ' ', last_name) = ?", answer.manager, function (err, manIdRes) {
+                        connection.query("INSERT INTO employee SET ?",
+                            {
+                                first_name: answer.firstName,
+                                last_name: answer.lastName,
+                                role_id: roleIdRes[0].id,
+                                manager_id: manIdRes[0].id
+                            },
+                            function (err) {
+                                if (err) throw err;
 
+                                console.log(`${answer.firstName} ${answer.lastName} has been added to the list of employees.`)
+
+                                start();
+                            }
+                        );
+                    });
+                });
+            });
+        });
+    });
 }
 
 function updateEmployeeRole() {
