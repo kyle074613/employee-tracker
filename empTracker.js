@@ -219,12 +219,18 @@ function addEmployee() {
             ]).then(function (answer) {
                 connection.query("SELECT id FROM role WHERE title = ?", answer.role, function (err, roleIdRes) {
                     connection.query("SELECT id FROM employee WHERE concat(first_name, ' ', last_name) = ?", answer.manager, function (err, manIdRes) {
+                        let managerId;
+                        if (answer.manager === "None")
+                            managerId = null;
+                        else
+                            managerId = manIdRes[0].id;
+
                         connection.query("INSERT INTO employee SET ?",
                             {
                                 first_name: answer.firstName,
                                 last_name: answer.lastName,
                                 role_id: roleIdRes[0].id,
-                                manager_id: manIdRes[0].id
+                                manager_id: managerId
                             },
                             function (err) {
                                 if (err) throw err;
