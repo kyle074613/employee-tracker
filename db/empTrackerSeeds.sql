@@ -1,7 +1,7 @@
 USE employee_tracker_db;
 
 INSERT INTO 
-    department (name) 
+    department (department) 
 VALUES 
     ("Sales"), 
     ("Engineering"), 

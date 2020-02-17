@@ -107,11 +107,28 @@ function viewEmployees() {
 }
 
 function addDepartment() {
+    inquirer.prompt({
+        name: "depName",
+        type: "input",
+        message: "Enter department name. "
+    }).then(function (answer) {
+        const query = `INSERT INTO department SET ?`;
+        connection.query(query, { department: answer.depName }, function (err) {
+            if (err) throw err;
 
+            console.log(`${answer.depName} added to the list of departments.`)
+
+            start();
+        });
+    });
 }
 
 function addRole() {
-
+    // Reference code on where to begin for this
+    // connection.query("SELECT id FROM department WHERE department = 'Sales'", function (err, res) {
+    //     console.log(res[0].id);
+    //     start();
+    // })
 }
 
 function addEmployee() {
