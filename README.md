@@ -4,7 +4,7 @@ This app is a command line app where the user can choose what to do with multipl
 
 ## Usage
 
-The user must first user run the empTrackerSchema.sql file (located in the db folder) in mySQL Workbench to create the database and tables. After that, the user must run the empTrackerSeeds.sql file (also located in the db folder) in mySQL Workbench to populate the tables. Once the databse and tables have been created and populated, the user must then enter their SQL username and password in the user and password fields at the begining of the javascript file. The user can then run the application in the command line (node empTracker.js).
+The user must first user run the empTrackerSchema.sql file (located in the db folder) in mySQL Workbench to create the database and tables. After that, the user must run the empTrackerSeeds.sql file (also located in the db folder) in mySQL Workbench to populate the tables. Once the database and tables have been created and populated, the user must then enter their SQL username and password in the user and password fields at the begining of the javascript file. The user can then run the application in the command line (node empTracker.js).
 
 
 ## Built With
