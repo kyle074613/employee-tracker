@@ -1,6 +1,6 @@
 # employee-tracker
 
-This app is a command line app where the user can choose what to do with multiple tables of business data. The user can choose to view the list of departments, roles, and employees from the corresponding tables, choose to add a department, role, or employee to the corresponding tables, or update the role of an existing employee. All this is done using SQL queries in the javasciprt file to communicate with an SQL database.
+This app is a command line app where the user can choose what to do with multiple tables of business data. The user can choose to view the list of departments, roles, and employees from the corresponding tables, choose to add a department, role, or employee to the corresponding tables, or update the role of an existing employee. All this is done using SQL queries in the javascript file to communicate with an SQL database.
 
 ## Usage
 
