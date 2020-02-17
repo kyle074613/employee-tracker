@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
+// Establish connection to SQL
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -17,6 +18,7 @@ connection.connect((err) => {
     start();
 });
 
+// Begins the app, asks the user what they want to do
 function start() {
     inquirer.prompt({
         name: "action",
@@ -52,7 +54,7 @@ function start() {
         }
     });
 }
-
+// View the departments in the department table
 function viewDepartments() {
     const query = "SELECT * FROM department ORDER BY id";
     connection.query(query, function (err, res) {
@@ -60,10 +62,12 @@ function viewDepartments() {
 
         console.log("\n")
         console.table(res);
+
         start();
     });
 }
 
+// Views the roles in the role table
 function viewRoles() {
     const query = `
     SELECT 
@@ -80,11 +84,13 @@ function viewRoles() {
 
         console.log("\n");
         console.table(res);
+
         start();
     });
 
 }
 
+// Shows list of employees in the employee table
 function viewEmployees() {
     const query = `
     SELECT
@@ -109,10 +115,12 @@ function viewEmployees() {
 
         console.log("\n");
         console.table(res);
+
         start();
     });
 }
 
+// Allows user to add a department to the department table
 function addDepartment() {
     inquirer.prompt({
         name: "depName",
@@ -130,6 +138,7 @@ function addDepartment() {
     });
 }
 
+// Allows user to add a role into the role table
 function addRole() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
@@ -171,6 +180,7 @@ function addRole() {
                         if (err) throw err;
 
                         console.log(`${answer.title} added to the list of roles.`)
+
                         start();
                     }
                 );
@@ -179,6 +189,7 @@ function addRole() {
     });
 }
 
+// Allows user to add an employee to the employee table
 function addEmployee() {
     connection.query("SELECT * FROM role", function (err, roleRes) {
         if (err) throw err;
@@ -254,6 +265,7 @@ function addEmployee() {
     });
 }
 
+// Allows user to update the role of any employee int he employee table
 function updateEmployeeRole() {
     connection.query("SELECT concat(first_name, ' ', last_name) AS full_name FROM employee", function (err, empRes) {
         if (err) throw err;
@@ -292,7 +304,9 @@ function updateEmployeeRole() {
                         [roleIdRes[0].id, answer.employee],
                         function (err) {
                             if (err) throw err;
+
                             console.log(`${answer.employee}'s role has been updated to ${answer.role}.`)
+
                             start();
                         }
                     );
