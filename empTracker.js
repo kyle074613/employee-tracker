@@ -66,23 +66,44 @@ function viewDepartments() {
 function viewRoles() {
     const query = `
     SELECT 
-        role.id, role.title, role.salary, department.name 
+        role.id, role.title, role.salary, department.department 
     FROM 
         role 
     LEFT JOIN 
         department 
-    ON (role.department_id = department.id)`
+    ON (role.department_id = department.id)`;
 
     connection.query(query, function (err, res) {
         console.log("\n");
         console.table(res);
         start();
-    })
+    });
 
 }
 
 function viewEmployees() {
+    const query = `
+    SELECT
+        employee.id, employee.first_name, employee.last_name, 
+        role.title, department.department, role.salary, 
+        concat(manager.first_name, ' ', manager.last_name) AS manager 
+    FROM
+        employee AS employee
+    LEFT JOIN
+        role
+    ON (role.id = employee.role_id)
+    LEFT JOIN 
+        department
+    ON (department.id = role.department_id)
+    LEFT JOIN
+        employee AS manager
+    ON (employee.manager_id = manager.id)`;
 
+    connection.query(query, function (err, res) {
+        console.log("\n");
+        console.table(res);
+        start();
+    });
 }
 
 function addDepartment() {
