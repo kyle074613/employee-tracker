@@ -55,7 +55,7 @@ function start() {
 }
 
 function viewDepartments() {
-    const query = "SELECT * FROM department";
+    const query = "SELECT * FROM department ORDER BY id";
     connection.query(query, function (err, res) {
         console.log("\n")
         console.table(res);
@@ -66,12 +66,13 @@ function viewDepartments() {
 function viewRoles() {
     const query = `
     SELECT 
-        role.id, role.title, role.salary, department.department 
+        role.id, role.title, role.salary, department.department
     FROM 
         role 
     LEFT JOIN 
         department 
-    ON (role.department_id = department.id)`;
+    ON (role.department_id = department.id)
+    ORDER BY id`;
 
     connection.query(query, function (err, res) {
         console.log("\n");
@@ -97,7 +98,8 @@ function viewEmployees() {
     ON (department.id = role.department_id)
     LEFT JOIN
         employee AS manager
-    ON (employee.manager_id = manager.id)`;
+    ON (employee.manager_id = manager.id)
+    ORDER BY id`;
 
     connection.query(query, function (err, res) {
         console.log("\n");
@@ -124,6 +126,52 @@ function addDepartment() {
 }
 
 function addRole() {
+    connection.query("SELECT * FROM department", function (err, res) {
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "Enter role title. "
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "Enter role salary. "
+            },
+            {
+                name: "department",
+                type: "list",
+                message: "Choose department: ",
+                choices: function () {
+                    var depArray = [];
+                    for (let i = 0; i < res.length; i++)
+                        depArray.push(res[i].department);
+
+                    return depArray;
+                }
+            }
+        ]).then(function (answer) {
+            connection.query("SELECT id FROM department WHERE department = ?", answer.department, function (err, res) {
+                if (err) throw err;
+
+                connection.query("INSERT INTO role SET ?",
+                    {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: res[0].id
+                    },
+                    function (err) {
+                        if (err) throw err;
+
+                        console.log(`${answer.title} added to the list of roles.`)
+                        start();
+                    }
+                );
+            });
+        });
+    });
+
+
     // Reference code on where to begin for this
     // connection.query("SELECT id FROM department WHERE department = 'Sales'", function (err, res) {
     //     console.log(res[0].id);
